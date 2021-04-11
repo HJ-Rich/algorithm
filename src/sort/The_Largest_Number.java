@@ -2,80 +2,60 @@ package sort;
 
 import java.util.Arrays;
 
+/*
+입출력 예
+numbers	            return
+[6, 10, 2]	        "6210"
+[3, 30, 34, 5, 9]	"9534330"
+ */
 //https://programmers.co.kr/learn/courses/30/lessons/42746?language=java
 public class The_Largest_Number {
     public static void main(String[] args) {
-        int[] numbers = new int[] {3, 30, 0, 34, 5, 9};
-        String answer = "";
+        int[] numbers = {3, 30, 34, 5, 9};
 
-        // 전략
-        // 1. 9부터 1까지 앞자리가 같은 숫자들을 뽑아온다.
-        // 2. 10으로 나눈 나머지가 큰 순서대로 정렬하되, 나머지가 같을 경우 큰 수가 앞으로 온다.
-        // 3. 0을 뒤에 모두 붙인다.
-        // 내가 원하는 조건대로 정렬할 수 있게.. 코드를 짜야겠는데?
-
-        // 런타임에러.... merge...
-
-        RichSort[] richArray = new RichSort[numbers.length];
+        Rich[] riches = new Rich[numbers.length];
         for(int i = 0; i < numbers.length; i++) {
-            richArray[i] = new RichSort(numbers[i]);
+            riches[i] = new Rich(numbers[i]);
         }
 
-        Arrays.sort(richArray);
-        for (RichSort richSort : richArray) {
-            answer += String.valueOf(richSort.number);
-        }
+        Arrays.sort(riches);
+
+        String answer = "";
+        for(Rich rich : riches) answer += rich.number;
+        if(allZeroes(numbers)) answer = "0";
 
         System.out.println(answer);
     }
 
-    static class RichSort implements Comparable<RichSort> {
+    // 전부 0으로 이뤄진 배열을 받았을 경우 예외 처리를 위한 메소드
+    public static boolean allZeroes(int[] numbers) {
+        boolean result = true;
+        for(int i : numbers) {
+            if(i != 0) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
 
+    // 정렬을 위한 Comparable
+    public static class Rich implements Comparable<Rich> {
         int number;
 
-        RichSort(int number) {
+        Rich(int number) {
             this.number = number;
         }
 
         @Override
-        public int compareTo(RichSort rich) {
-            int result = -1;
+        public int compareTo(Rich o) {
+            int temp1 = Integer.parseInt("" + this.number + o.number);
+            int temp2 = Integer.parseInt("" + o.number + this.number);
 
-            int firstDigitOfField = Integer.parseInt(String.valueOf(this.number).substring(0, 1));
-            int firstDigitOfParameter = Integer.parseInt(String.valueOf(rich.number).substring(0, 1));
-
-            // 맨 앞자리 숫자가 큰 순서대로 정렬한다.
-            if(firstDigitOfField > firstDigitOfParameter) {
-                result = -1;
-            }
-            else if(firstDigitOfField < firstDigitOfParameter) {
-                result = 1;
-            }
-
-            // 맨 앞자리 숫자가 같을 경우,
-            else if(firstDigitOfField == firstDigitOfParameter) {
-
-                // 10으로 나눈 나머지가 큰 순서대로 정렬한다.
-                if(this.number % 10 > rich.number % 10) {
-                    result = -1;
-                }
-                else if(this.number % 10 < rich.number % 10) {
-                    result = 1;
-                }
-
-                // 10으로 나눈 나머지도 같을 경우 더 작은 수를 먼저 정렬한다
-                else if(this.number % 10 == rich.number % 10) {
-                    if(this.number < rich.number) {
-                        result = -1;
-                    }if(this.number > rich.number) {
-                        result = 1;
-                    }else {
-                        result = 0;
-                    }
-                }
-            }
-
-            return result;
+            if(temp1 > temp2) return -1;
+            else if(temp2 > temp1) return 1;
+            else return 0;
         }
     }
+
 }
