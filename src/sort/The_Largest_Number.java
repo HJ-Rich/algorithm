@@ -9,6 +9,18 @@ numbers	            return
 [3, 30, 34, 5, 9]	"9534330"
  */
 //https://programmers.co.kr/learn/courses/30/lessons/42746?language=java
+
+/*
+
+다 푼 이후 다른 사람의 풀이를 보고 배운 점
+
+1. 맨 앞 숫자가 0이면 전부 0이라는 의미니까 배열 전체를 조회할 필요가 없었다. 맨 마지막에 삼항연산자로 첫글자가 0인지 판별하는 거 쩔었다..
+2. String += 대신 StringBuilder의 append를 사용하도록 해보자...
+3. 단순 정수형을 원하는 방식으로 정렬하려는 거라면, Comparable을 구현하는 방법도 있지만,
+Coolections.sort(list (a,b) -> { ... }); 와 같은 람다식으로 바로 처리를 할 수도 있다.
+
+ */
+
 public class The_Largest_Number {
     public static void main(String[] args) {
         int[] numbers = {3, 30, 34, 5, 9};
@@ -22,6 +34,7 @@ public class The_Largest_Number {
 
         String answer = "";
         for(Rich rich : riches) answer += rich.number;
+
         if(allZeroes(numbers)) answer = "0";
 
         System.out.println(answer);
