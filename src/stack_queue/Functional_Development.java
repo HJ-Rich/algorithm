@@ -25,11 +25,8 @@ public class Functional_Development {
             speedsList.add(speeds[i]);
         }
 
-        // 배열의 맨 앞에 있는 요소가 100이 되기 위한 횟수를 구한다.
-        // 그 횟수만큼 더하면서 100이 아닐 때까지 구한다.
-        int workday = 0;
+        // 배열의 맨 앞에 있는 요소가 배포되기 위한 작업일을 구한다.
         for(int i = 0; i < progressesList.size(); i++) {
-
 
             // 이번 요소를 무조건 100이 넘게 만들 것이기 때문에 이번에 배열에 추가할 숫자를 1로 선언하고 시작한다.
             int answer = 1;
@@ -39,16 +36,19 @@ public class Functional_Development {
             if((100 - progressesList.get(i)) % speedsList.get(i) != 0) {
                 share++;
             }
-            // 같은 몫으로 각자의 작업속도를 곱한 값이 100이 넘는 연속되는 요소의 수를 구한다.
+
+            // 다음 요소부터 탐색을 하기 위해 현재 인덱스+1 해준 새로운 인덱스 변수를 선언한다.
             int index = i+1;
+
             // 배열 범위를 벗어나지 않는 한도내에서
             while(index <= progressesList.size()-1) {
-                // 다음요소에 몫*작업속도를 더한 값이 100을 넘으면
+                // 다음요소의 진행률에 몫*작업속도를 더한 값이 100을 넘으면
                 if(progressesList.get(index) + speedsList.get(index) * share >= 100) {
-                    // 정답리스트에 이번에 들어갈 요소의 수를 추가하고 인덱스를 추가한다.
+                    // 정답리스트에 이번에 들어갈 요소에 1을 더하고 인덱스를 더한다.
                     answer++;
                     index++;
                 }
+
                 // 100이 넘지 않으면 브레이크.
                 else {
                     break;
@@ -62,9 +62,19 @@ public class Functional_Development {
             // 배포된 요소의 수-1 만큼 i에 더해서 그 다음부터 탐색토록 한다.
             i += answer -1;
         }
+
+        // 리스트를 배열로 변환하여 반환한다.
         int[] answers = new int[answerList.size()];
         for (int i = 0; i < answers.length; i++) {
             answers[i] = answerList.get(i);
+        }
+
+        // 출력
+        for(int i = 0; i < answers.length; i++) {
+            if(i == 0) System.out.print("[");
+            System.out.print(answers[i]);
+            if(i == answers.length-1) System.out.print("]");
+            else System.out.print(",");
         }
 
     }
