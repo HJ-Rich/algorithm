@@ -1,6 +1,5 @@
 package etc;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,19 +17,6 @@ public class Open_Chatting_Room {
                 case "Change":
                     idmap.put(temp[1], temp[2]);
                     break;
-            }
-        }
-
-
-        for (int i = 0; i < record.length; i++) {
-            if(record[i].split(" ")[0].equals("Change")) {
-                for(int j = 0; j < record.length; j++) {
-                    String uid = record[i].split(" ")[1];
-                    if(record[j].split(" ")[1].equals(uid)) {
-                        String temp = record[j].split(" ")[0] + " " + record[j].split(" ")[1] + " " + record[i].split(" ")[2];
-                        record[j] = temp;
-                    }
-                }
             }
         }
 
