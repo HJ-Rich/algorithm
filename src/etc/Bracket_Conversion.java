@@ -4,7 +4,8 @@ package etc;
 public class Bracket_Conversion {
     public static void main(String[] args) {
         StringBuilder answerBuilder = new StringBuilder();
-        System.out.println(new Bracket_Conversion().solution("()))((()", answerBuilder));
+        new Bracket_Conversion().solution("()))((()", answerBuilder);
+        System.out.println(answerBuilder);
     }
 
     private void solution(String p, StringBuilder answerBuilder) {
@@ -33,16 +34,24 @@ public class Bracket_Conversion {
         // 먼저 왼쪽을 최소단위로 쪼개고 쪼갠 결과가 올바른이면 붙이고 남은쪽을 다시 쪼개는식.
         // 쪼갠 결과가 올바르지 않다면 4번의 과정을 수행.
 
+        // 재귀 브레이커
+        if(p.equals("")) {
+            return;
+        }
+
         // u, v로 분리하기 위해 StringBuilder 객체 선언.
         StringBuilder u = new StringBuilder();
         StringBuilder v = new StringBuilder();
 
         // u가 완성되었는지 여부를 판별할 boolean 객체
         boolean isUComplete = false;
+        boolean isRightV = true;
 
         // 최소 단위로 u를 분리해내기 위한 int 객체 둘 선언.
         int left = 0;
         int right = 0;
+        int vLeft = 0;
+        int vRight = 0;
 
         // getU 반복문을 수행하고 나면 u와 v가 분리된다.
         getU:for (int i = 0; i < p.length(); i++) {
@@ -50,7 +59,10 @@ public class Bracket_Conversion {
 
             //u가 완성되었을 경우 v에 char를 쌓는다.
             if(isUComplete) {
+                if (c == '(') vLeft++;
+                else if (c == ')') vRight++;
                 v.append(c);
+                if(right > left) isRightV = false;
             }
 
             // u가 완성되지 않았을 경우 u에 char를 쌓는다.
@@ -62,21 +74,18 @@ public class Bracket_Conversion {
             }
         }
 
-        // 완성된 u가 올바른 괄호 문자열인지 검증한다.
-        // 올바른 괄호 문자열인지 검증하는 알고리즘.........
-        // ( ( ) )
-        // ( ) ) (
-        // ) ) ( (
-        // 열림은 연속되어도 된다.
-        // 그러나 닫힘은 열린 숫자 이상으로 닫힐 수 없다.
-        // 이 지점을 이용해보자
-
-
-
         // 올바른 괄호 문자열일 경우 그냥 붙인다
-        answerBuilder.append(u);
+        if(isRightV) {
+            answerBuilder.append(u);
+        }
 
-        //올바른 괄호 문자열이 아닐 경우
+        // 올바른 괄호 문자열이 아닐 경우 처리
+        else if(!isRightV) {
+
+        }
+
+
+
 
         // 재귀적으로 수행한다.
         solution(v.toString(), answerBuilder);
