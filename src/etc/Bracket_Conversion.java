@@ -3,78 +3,86 @@ package etc;
 // https://programmers.co.kr/learn/courses/30/lessons/60058
 public class Bracket_Conversion {
     public static void main(String[] args) {
-        StringBuilder answerBuilder = new StringBuilder();
+        StringBuilder answerBuilder = new StringBuilder("");
         new Bracket_Conversion().solution2("()))((()", answerBuilder);
         System.out.println(answerBuilder);
     }
 
-    private void solution2(String p, StringBuilder answerBuilder) {
+    private String solution2(String p, StringBuilder answerBuilder) {
         if(p.equals("")) {
-            return;
+            return "";
         }
 
-        // u, v로 분리하기 위해 StringBuilder 객체 선언.
         StringBuilder u = new StringBuilder();
         StringBuilder v = new StringBuilder();
 
-        // u가 완성되었는지 여부를 판별할 boolean 객체
-        boolean isUComplete = false;
-        boolean isRightU = true;
+        // 주어진 문자열 p를 더이상 나눌 수 없는 균형잡힌 괄호 u와, 나머지 문자열 v로 나눈다.
+        getDividedUV(p, u, v);
 
-        // 최소 단위로 u를 분리해내기 위한 int 객체 둘 선언.
+        // u가 올바른 괄호 문자열이면 그대로 붙이고, 아니면 고쳐서 붙인다.
+        if(isRightBracket(u.toString())) answerBuilder.append(u);
+        else answerBuilder.append(getUFixed(u));
+
+        // 나머지 v에 대해서 재귀수행한다.
+        return solution2(v.toString(), answerBuilder);
+    }
+
+    // 문자열 p를 받아서 더이상 나눌 수 없는 균형잡힌 문자열 U와 나머지 문자열 V로 나누는 메소드
+    public static void getDividedUV(String p, StringBuilder u, StringBuilder v) {
+
         int left = 0;
         int right = 0;
-        int vLeft = 0;
-        int vRight = 0;
+        boolean isValancedU = false;
 
-        // getU 반복문을 수행하고 나면 u와 v가 분리된다.
         getU:for (int i = 0; i < p.length(); i++) {
             char c = p.charAt(i);
 
-            //u가 완성되었을 경우 v에 char를 쌓는다.
-            if(isUComplete) {
-                if (c == '(') vLeft++;
-                else if (c == ')') vRight++;
-                v.append(c);
+            // u가 균형잡힌 문자열로 완성되었을 경우 v에 나머지 char를 쌓는다.
+            if(isValancedU) {
+                v.append(p, i, p.length());
+                break getU;
             }
 
-            // u가 완성되지 않았을 경우 u에 char를 쌓는다.
-            else if(!isUComplete) {
+            // u가 균형잡힌 문자열로 완성되지 않았을 경우 u에 char를 쌓는다.
+            else if(!isValancedU) {
                 if (c == '(') left++;
                 else if (c == ')') right++;
                 u.append(c);
-                if(right > left) isRightU = false;
-                if(left == right) isUComplete = true;
+                if(left != 0 && left == right) isValancedU = true;
             }
         }
 
-        // 올바른 괄호 문자열일 경우 그냥 붙인다
-        if(isRightU) {
-            answerBuilder.append(u);
+    }
+
+    // U를 올바른 괄호 문자열로 변환하는 메소드
+    public static StringBuilder getUFixed(StringBuilder u) {
+        StringBuilder uBuilder = new StringBuilder("(");
+        u.deleteCharAt(0);
+        u.deleteCharAt(u.length()-1);
+        for (int i = 0; i < u.length(); i++) {
+            if(u.charAt(i) == '(') uBuilder.append(")");
+            else if(u.charAt(i) == ')') uBuilder.append("(");
         }
+        uBuilder.append(")");
+        return u;
+    }
 
+    // 올바른 괄호 문자열인지 판별하는 메소드
+    public static boolean isRightBracket(String p) {
+        boolean result = true;
 
-        /*
-        4. 문자열 u가 "올바른 괄호 문자열"이 아니라면 아래 과정을 수행합니다.
-          4-1. 빈 문자열에 첫 번째 문자로 '('를 붙입니다.
-          4-2. 문자열 v에 대해 1단계부터 재귀적으로 수행한 결과 문자열을 이어 붙입니다.
-          4-3. ')'를 다시 붙입니다.
-          4-4. u의 첫 번째와 마지막 문자를 제거하고, 나머지 문자열의 괄호 방향을 뒤집어서 뒤에 붙입니다.
-          4-5. 생성된 문자열을 반환합니다.
-         */
-        // 올바른 괄호 문자열이 아닐 경우 처리
-        else if(!isRightU) {
-            StringBuilder uBuilder = new StringBuilder("(");
-            for (int i = 0; i < u.length(); i++) {
-                if(u.charAt(i) == '(') uBuilder.append(")");
-                else uBuilder.append("(");
+        int left = 0;
+        int right = 0;
+        for(int i = 0; i < p.length(); i++) {
+            if(p.charAt(i) == '(') left++;
+            else if(p.charAt(i) == ')') right++;
+            if(right > left) {
+                result = false;
+                break;
             }
-            uBuilder.append(")");
-            answerBuilder.append(uBuilder);
         }
 
-        // 재귀적으로 수행한다.
-        solution2(v.toString(), answerBuilder);
+        return result;
     }
 
 
