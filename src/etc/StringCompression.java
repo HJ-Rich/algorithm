@@ -1,9 +1,7 @@
 package etc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 // https://programmers.co.kr/learn/courses/30/lessons/60057
@@ -11,29 +9,40 @@ public class StringCompression {
 
     public static void main(String[] args) {
         String s = "abcabcabcabc3dede";
-        String answer = solution(s);
+        int answer = solution(s);
         System.out.println(answer);
     }
 
-    private static String solution(String s) {
-        String result = "";
-        // 같은 길이의 숫자로 나누어 떨어지는 길이로만 압축이 가능하다.
-        // 즉 소수일 경우, 1개 단위로 잘랐을 때만
+    private static int solution(String s) {
+        int result = s.length();
 
-        // 몫 구하기
+        // 나누어 떨어지는 길이로만 압축이 가능하다.
+
+        // 나누어 떨어지는 몫 구하기
         List<Integer> shareList = getShareList(s);
 
-        // 구해온 몫을 길이로 하여 잘라본다.
-        Map<Integer, Map<String, Integer>> compressMap = new HashMap<>();
         for (int i = 0; i < shareList.size(); i++) {
-            Map<String, Integer> subMap = new HashMap<>();
-            
+            int compressed = result;
 
+            int length = shareList.get(i);
+
+            // 구해온 몫을 길이로 잘라서 리스트에 담는다
+            List<String> compressList = new ArrayList<>();
+            for (int j = 0; j < s.length() / length; j++) {
+                compressList.add(s.substring(j * length, j * length + length));
+            }
+
+            // 리스트에서 하나씩 꺼내어 압축 결과를 만들어낸다.
+            StringBuilder compressResult = new StringBuilder();
+            for (int j = 0; j < compressList.size(); j++) {
+
+            }
+
+            // 압축된 결과의 길이가 result 보다 작으면 result를 교체한다.
+            if(result > compressed) {
+                result = compressed;
+            }
         }
-
-
-
-
         return result;
     }
 
