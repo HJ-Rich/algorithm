@@ -1,6 +1,5 @@
 package greedy;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -44,7 +43,7 @@ public class Greedy_BJ_1931 {
             }
 
             if(index != -1) {
-                meetings.get(index)
+                meetings.get(index);
             }
 
         }

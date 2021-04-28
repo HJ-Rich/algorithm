@@ -1,19 +1,20 @@
 package etc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 // https://programmers.co.kr/learn/courses/30/lessons/60057
 public class StringCompression {
 
     public static void main(String[] args) {
-        String s = "abcabcabcabc3dede";
-        int answer = solution(s);
-        System.out.println(answer);
+        String s = "xababcdcdababcdcd";
+        int answer = mySolution(s);
+        System.out.println("정답은~~~" + answer);
     }
 
-    private static int solution(String s) {
+    private static int mySolution(String s) {
         int result = s.length();
 
         // 나누어 떨어지는 길이로만 압축이 가능하다.
@@ -22,7 +23,6 @@ public class StringCompression {
         List<Integer> shareList = getShareList(s);
 
         for (int i = 0; i < shareList.size(); i++) {
-            int compressed = result;
 
             int length = shareList.get(i);
 
@@ -36,19 +36,48 @@ public class StringCompression {
             StringBuilder compressResult = new StringBuilder();
             for (int j = 0; j < compressList.size(); j++) {
 
+                int numberOfElement = 1;
+                int index = j;
+                try {
+                    while (true) {
+                        String a = compressList.get(index);
+                        String b = compressList.get(index + 1);
+                        if (a.equals(b)) {
+                            index++;
+                            numberOfElement++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+                // 마지막 요소가 비교할 대상을 찾지 못하며 IOBE 발생
+                // 그와 동시에 마지막 요소가 추가되지 못하여 마지막이 줄어든거네
+                catch(Exception e) {
+                }
+
+                if(numberOfElement > 1) {
+                    j = j + numberOfElement - 1;
+                    compressResult.append(numberOfElement + compressList.get(j));
+                }
+                else {
+                    compressResult.append(compressList.get(j));
+                }
+            }
+            HashSet
+            // 압축된 결과의 길이가 result 보다 작으면 result를 교체한다.
+            if(result > compressResult.length()) {
+                result = compressResult.length();
             }
 
-            // 압축된 결과의 길이가 result 보다 작으면 result를 교체한다.
-            if(result > compressed) {
-                result = compressed;
-            }
+            System.out.println(length + "로 나눴을 때! : " + compressResult.length() + " : " + compressResult);
         }
         return result;
     }
 
     private static List<Integer> getShareList(String s) {
         List<Integer> result = new ArrayList<>();
-        int target = Integer.parseInt(s);
+        int target = s.length();
         for (int i = 1; i < target; i++) {
             if(target % i == 0) result.add(i);
         }
