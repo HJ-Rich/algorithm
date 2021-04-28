@@ -3,89 +3,74 @@ package etc;
 // https://programmers.co.kr/learn/courses/30/lessons/60058
 public class Bracket_Conversion {
     public static void main(String[] args) {
-        StringBuilder answerBuilder = new StringBuilder("");
-        new Bracket_Conversion().solution2("()))((()", answerBuilder);
-        System.out.println(answerBuilder);
+        System.out.println(solution("()))((()"));
     }
 
-    private String solution2(String p, StringBuilder answerBuilder) {
-        if(p.equals("")) {
-            return "";
+    private static String solution(String s) {
+        StringBuffer result = new StringBuffer();
+        recursiveSolution(s, result);
+        return result.toString();
+    }
+
+    private static void recursiveSolution(String s, StringBuffer result) {
+        // 이미 올바른 괄호 문자열이라면 그대로 return
+        boolean isRightBracket = checkIfRightBracket(s);
+        if(isRightBracket) return s;
+
+        // 입력이 빈 문자열인 경우 빈 문자열을 반환.
+        if(s.isEmpty()) return s;
+
+        String u = getU(s);
+        String v = s.substring(u.length());
+
+        if(checkIfRightBracket(u)) {
+            result.append(u);
+        }
+        else {
+            String temp = "(";
+
+
+
         }
 
-        StringBuilder u = new StringBuilder();
-        StringBuilder v = new StringBuilder();
-
-        // 주어진 문자열 p를 더이상 나눌 수 없는 균형잡힌 괄호 u와, 나머지 문자열 v로 나눈다.
-        getDividedUV(p, u, v);
-
-        // u가 올바른 괄호 문자열이면 그대로 붙이고, 아니면 고쳐서 붙인다.
-        if(isRightBracket(u.toString())) answerBuilder.append(u);
-        else answerBuilder.append(getUFixed(u));
-
-        // 나머지 v에 대해서 재귀수행한다.
-        return solution2(v.toString(), answerBuilder);
+        return result.toString();
     }
 
-    // 문자열 p를 받아서 더이상 나눌 수 없는 균형잡힌 문자열 U와 나머지 문자열 V로 나누는 메소드
-    public static void getDividedUV(String p, StringBuilder u, StringBuilder v) {
+    // u를 반환하는 메소드 (u는 더이상 분리할 수 없는 균형잡힌 괄호 문자열)
+    private static String getU(String s) {
+        StringBuffer result = new StringBuffer();
 
-        int left = 0;
-        int right = 0;
-        boolean isValancedU = false;
-
-        getU:for (int i = 0; i < p.length(); i++) {
-            char c = p.charAt(i);
-
-            // u가 균형잡힌 문자열로 완성되었을 경우 v에 나머지 char를 쌓는다.
-            if(isValancedU) {
-                v.append(p, i, p.length());
-                break getU;
+        int checker = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '(') {
+                checker++;
+                result.append("(");
+            }
+            else if(s.charAt(i) == ')') {
+                checker--;
+                result.append(")");
             }
 
-            // u가 균형잡힌 문자열로 완성되지 않았을 경우 u에 char를 쌓는다.
-            else if(!isValancedU) {
-                if (c == '(') left++;
-                else if (c == ')') right++;
-                u.append(c);
-                if(left != 0 && left == right) isValancedU = true;
-            }
+            if(checker == 0) break;
         }
 
+        return result.toString();
     }
 
-    // U를 올바른 괄호 문자열로 변환하는 메소드
-    public static StringBuilder getUFixed(StringBuilder u) {
-        StringBuilder uBuilder = new StringBuilder("(");
-        u.deleteCharAt(0);
-        u.deleteCharAt(u.length()-1);
-        for (int i = 0; i < u.length(); i++) {
-            if(u.charAt(i) == '(') uBuilder.append(")");
-            else if(u.charAt(i) == ')') uBuilder.append("(");
-        }
-        uBuilder.append(")");
-        return u;
-    }
+    // 올바른 괄호 문자열인지 체크하는 메소드
+    private static boolean checkIfRightBracket(String s) {
+        int checker = 0;
 
-    // 올바른 괄호 문자열인지 판별하는 메소드
-    public static boolean isRightBracket(String p) {
-        boolean result = true;
-
-        int left = 0;
-        int right = 0;
-        for(int i = 0; i < p.length(); i++) {
-            if(p.charAt(i) == '(') left++;
-            else if(p.charAt(i) == ')') right++;
-            if(right > left) {
-                result = false;
-                break;
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '(') checker++;
+            else if(s.charAt(i) == ')') checker--;
+            if(checker < 0) {
+                return false;
             }
         }
 
-        return result;
+        return true;
     }
-
-
 
 
 }
