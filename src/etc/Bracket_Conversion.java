@@ -7,30 +7,48 @@ public class Bracket_Conversion {
     }
 
     private static String solution(String s) {
-        StringBuffer result = new StringBuffer();
-        recursiveSolution(s, result);
-        return result.toString();
+        return recursiveSolution(s);
     }
 
-    private static void recursiveSolution(String s, StringBuffer result) {
-        // 이미 올바른 괄호 문자열이라면 그대로 return
-        boolean isRightBracket = checkIfRightBracket(s);
-        if(isRightBracket) return s;
-
-        // 입력이 빈 문자열인 경우 빈 문자열을 반환.
+    private static String recursiveSolution(String s) {
+        // 1. 입력이 빈 문자열인 경우 빈 문자열을 반환. (재귀 종료)
         if(s.isEmpty()) return s;
 
+        // 2. 균형잡힌 괄호 문자열 u와 나머지 v로 분리한다. u는 더이상 분리 불가해야 하고 v는 빈 문자열일 수 있다.
         String u = getU(s);
         String v = s.substring(u.length());
 
-        if(checkIfRightBracket(u)) {
-            result.append(u);
+        // 3. 문자열 u가 "올바른 괄호 문자열" 이라면 문자열 v에 대해 1단계부터 다시 수행합니다.
+        if(isRightBracket(u)) {
+            // 3-1. 수행한 결과 문자열을 u에 이어 붙인 후 반환합니다
+            return u + recursiveSolution(v);
         }
+
+        // 4. u가 올바른 괄호 문자열이 아니라면 아래 과정을 수행한다.
         else {
-            String temp = "(";
+            // 4-1. 빈 문자열에 첫 번째 문자로 '('를 붙인다.
+            return new StringBuffer("(")
+            // 4-2. 문자열 v에 대해 1단계부터 재귀적으로 수행한 결과 문자열을 이어 붙입니다.
+            .append(recursiveSolution(v))
+            // 4-3. ')'를 다시 붙입니다.
+            .append(")")
+            // 4-4. u의 첫 번째와 마지막 문자를 제거하고, 나머지 문자열의 괄호 방향을 뒤집어서 뒤에 붙입니다.
+            .append(postProcessForU(u))
+            // 4-5. 생성된 문자열을 반환합니다.
+            .toString();
+        }
+    }
 
+    // u의 첫번째, 마지막 문자를 제거하고 나머지 문자열의 괄호 방향을 뒤집어 반환하는 메소드.
+    private static String postProcessForU(String u) {
+        StringBuffer result = new StringBuffer();
 
+        StringBuffer newU = new StringBuffer(u).deleteCharAt(u.length()-1).deleteCharAt(0);
+        char[] newUCharArray = newU.toString().toCharArray();
 
+        for (char c : newUCharArray) {
+            if(c == '(') result.append(")");
+            else if(c == ')') result.append("(");
         }
 
         return result.toString();
@@ -58,7 +76,7 @@ public class Bracket_Conversion {
     }
 
     // 올바른 괄호 문자열인지 체크하는 메소드
-    private static boolean checkIfRightBracket(String s) {
+    private static boolean isRightBracket(String s) {
         int checker = 0;
 
         for (int i = 0; i < s.length(); i++) {
@@ -71,6 +89,5 @@ public class Bracket_Conversion {
 
         return true;
     }
-
 
 }
