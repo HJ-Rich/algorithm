@@ -7,6 +7,7 @@ import java.util.List;
 public class FourOperations {
 
     public static void main(String[] args) {
+        System.out.println(solution(new String[] {"1", "-", "3", "+", "5", "-", "8"}));
         System.out.println(solution(new String[] {"5", "-", "3", "+", "1", "+", "2", "-", "4"}));
     }
 
@@ -33,6 +34,7 @@ public class FourOperations {
 
         // 뺄셈을 만났는지 여부를 체크하는 변수
         boolean isSubstract = false;
+        int temp = 0;
 
         // 첫 문자열을 제외했기 때문에 두 배열의 길이는 같다.
         for (int i = 0; i < operations.size(); i++) {
@@ -40,23 +42,26 @@ public class FourOperations {
             if(isSubstract) {
                 // 덧셈을 만나면 임시 누적 합연산한다.
                 if(operations.get(i).equals("+")) {
-
+                    temp += Integer.parseInt(numbers.get(i));
                 }
                 // 뺄셈을 만나면 임시 누적에서 빼고, 임시 누적값을 누적에서 빼고, isSubstract = false 해준다.
                 else if(operations.get(i).equals("-")) {
-
+                    temp -= Integer.parseInt(numbers.get(i));
+                    result -= temp;
+                    isSubstract = false;
                 }
             }
             else {
                 // 뺄셈을 아직 만나지 못했을 경우, 덧셈은 단순히 합연산하면 된다.
                 if(operations.get(i).equals("+")) {
-
+                    result += Integer.parseInt(numbers.get(i));
                 }
                 // 뺄셈을 처음 만났을 경우, 다음 뺄셈을 만날때까지 임시 변수에 값을 누적한 후,
                 // 다음 뺄셈을 만났을 때까지의 연산 결과를 누적값에서 뺀다.
                 // isSubstract = true로 선언해준다.
                 else if(operations.get(i).equals("-")) {
-
+                    temp = Integer.parseInt(numbers.get(i));
+                    isSubstract = true;
                 }
             }
         }
