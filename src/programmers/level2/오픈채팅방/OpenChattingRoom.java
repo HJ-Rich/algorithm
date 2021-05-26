@@ -1,10 +1,10 @@
-package etc;
+package programmers.level2.오픈채팅방;
 
 import java.util.HashMap;
 import java.util.Map;
 
 // https://programmers.co.kr/learn/courses/30/lessons/42888
-public class Open_Chatting_Room {
+public class OpenChattingRoom {
 
     public static void main(String[] args) {
         String[] record = new String[] {"Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"};
