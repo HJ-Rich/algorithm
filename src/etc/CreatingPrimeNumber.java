@@ -3,6 +3,8 @@ package etc;
 import java.util.ArrayList;
 import java.util.List;
 
+// 소수만들기
+// https://programmers.co.kr/learn/courses/30/lessons/12977
 public class CreatingPrimeNumber {
 
     public static void main(String[] args) {
