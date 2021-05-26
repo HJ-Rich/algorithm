@@ -1,4 +1,4 @@
-package exhaustiveSearch;
+package programmers.level1.모의고사;
 
 import java.util.ArrayList;
 import java.util.List;
