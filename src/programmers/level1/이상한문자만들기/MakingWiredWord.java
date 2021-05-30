@@ -10,28 +10,30 @@ public class MakingWiredWord {
     }
 
     private static String solution(String s) {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder resultBuilder = new StringBuilder();
 
         char[] elements = s.toCharArray();
         boolean isEven = true;
 
         for (int i = 0; i < elements.length; i++) {
             char target = elements[i];
-            if(target == ' ') {
+            if (target == ' ') {
                 isEven = true;
-                stringBuilder.append(" ");
+                resultBuilder.append(" ");
                 continue;
             }
 
-            if(isEven) {
-                stringBuilder.append(String.valueOf(target).toUpperCase());
+            if (isEven) {
+                resultBuilder.append(String.valueOf(target).toUpperCase());
                 isEven = false;
             } else {
-                stringBuilder.append(String.valueOf(target).toLowerCase());
+                resultBuilder.append(String.valueOf(target).toLowerCase());
                 isEven = true;
             }
 
         }
 
-        return stringBuilder.toString();
+        return resultBuilder.toString();
     }
+
+}
