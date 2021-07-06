@@ -7,41 +7,46 @@ import java.util.List;
 @Builder
 public class BubbleSort {
 
-    private int randomIntegerArrayMin;
-    private int randomIntegerArrayMax;
-    private int randomIntegerArraySize;
-    private double time;
+    private List<Integer> listToSort;
     private int comparisons;
     private int swaps;
 
     public static void main(String[] args) {
-        BubbleSort.builder()
-            .randomIntegerArrayMin(1)
-            .randomIntegerArrayMax(100000)
-            .randomIntegerArraySize(70000)
-            .build().sort();
-    }
+        BubbleSort bubbleSort = BubbleSort.builder()
+                                    .listToSort(
+                                        RandomIntegerArray.builder()
+                                            .min(1)
+                                            .max(100000)
+                                            .size(40000)
+                                            .build().getRandomIntegerArray()
+                                    ).build();
 
-    public void sort() {
-        List<Integer> integerList = RandomIntegerArray.builder().min(randomIntegerArrayMin).max(randomIntegerArrayMax).size(randomIntegerArraySize).build().getRandomIntegerArray();
-        System.out.println("before sort");
-        System.out.println(integerList);
+        System.out.print("정렬 전 0-10 인덱스 : ");
+        for (int i = 0; i < 10; i++) {
+            System.out.print(bubbleSort.listToSort.get(i) + " ");
+        }
+        System.out.println();
 
+        System.gc();
+        long before = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         long sortStarted = System.currentTimeMillis();
-        bubbleSort(integerList, 0);
+
+        bubbleSort.bubbleSort(bubbleSort.listToSort, 0);
+
         long sortEnded = System.currentTimeMillis();
-        this.time = (sortEnded - sortStarted) / 1000.0;
+        double time = (sortEnded - sortStarted) / 1000.0;
 
-        System.out.println("\n\n\n\n\n\n\n\n\n");
-        System.out.println("after sort");
-        System.out.println(integerList);
+        System.gc();
+        long after = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        double usedMemory = (before - after) / 1024.0 / 1024.0;
 
-        printResult();
-    }
-
-    private void printResult() {
-        System.out.println("finished sorting for " + time + " seconds!");
-        System.out.println(swaps + " swaps out of " + comparisons + " comparisons used");
+        System.out.print("정렬 후 0-10 인덱스 : ");
+        for (int i = 0; i < 10; i++) {
+            System.out.print(bubbleSort.listToSort.get(i) + " ");
+        }
+        System.out.println();
+        System.out.printf("%.3f 초 소요\n", time);
+        System.out.printf("%.3f MB 소요\n", usedMemory);
     }
 
     private void bubbleSort(List<Integer> integerList, int trials) {
